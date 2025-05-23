@@ -10,12 +10,15 @@ app.use(cors());
 app.use(express.json());
 
 // Google Sheets auth
-const auth = new google.auth.GoogleAuth({
-    keyFile: path.join(__dirname, 'credentials.json'), // Make sure this file is present in your deployment
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
 
-const SPREADSHEET_ID = '1bQmSdkMRbA2BMUUkcPyNpNPqnoWkvUUCHJOLw9MWPXA'; // Replace with your actual ID
+const auth = new google.auth.JWT(
+    process.env.GOOGLE_CLIENT_EMAIL,
+    null,
+    process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Important!
+    ['https://www.googleapis.com/auth/spreadsheets']
+);
+
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID; // Replace with your actual ID
 
 app.post('/api/submit-form', async(req, res) => {
     console.log("📥 Incoming Request to /api/submit-form");
