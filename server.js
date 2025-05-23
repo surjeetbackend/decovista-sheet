@@ -25,7 +25,8 @@ app.post('/api/submit-form', async(req, res) => {
     console.log("📦 Body:", req.body);
 
     try {
-        const client = await auth.getClient();
+        const client = auth; // ✅ The JWT object is the client
+
         console.log("🔐 Authenticated with Google");
 
         const sheets = google.sheets({ version: 'v4', auth: client });
